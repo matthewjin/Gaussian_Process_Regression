@@ -5,15 +5,16 @@ function main()
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Settings
+addpath ./statistics;	% Add folder for LOWESS
 scale = 2;		% For scaling the variance (visual)
 range = [1, 50];
 full_size = 1000;
-init_size = 10;
+init_size = 10; 
 rng(100);		% Set seed
 
 % Establish a posterior_matrix that will be updated
 posterior_matrix = [linspace(range(1), range(2), full_size)', zeros(full_size, 1), ...
-  zeros(full_size, 1)];
+      zeros(full_size, 1)];
 
 % Generate data using noiseless GP
 hidden_x = posterior_matrix(:, 1);	% Generate a realization of the GP
