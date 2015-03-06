@@ -1,9 +1,8 @@
-
 * To Do
 ** Figure out why it doesn't scale well:
-   When range = [1, 4], things get fucked up
+   When range = [1, 4], things get messed up
 ** Figure out why x needs to be sorted when updating
-   When unsorted, things get fucked up
+   When unsorted, things get messed up
 ** Figure out why all functions requires the same number of iterations
    Surely, depending on the function, the simpler the function,
    the faster it should terminate?
