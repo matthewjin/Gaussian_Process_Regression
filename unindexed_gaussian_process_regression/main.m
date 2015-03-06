@@ -27,7 +27,7 @@ y = hidden_y(x_index);
 posterior_matrix(:, 2) = xy(:, 2);
 muy=xy(:,2);
 
-k = computeKernelParam(x,y,muy(x_index)); % Establish prior kernel
+k = compute_kernel_parameters(x,y,muy(x_index)); % Establish prior kernel
 
 % Compute the posterior gaussian process
 count = 1; % Set counter
@@ -61,7 +61,7 @@ while true
   % Establish prior kernel
   % Find all prior-belief output values for known samples
   prior_y = posterior_matrix(ismember(posterior_matrix(:, 1), x), 2);
-  k =computeKernelParam(x,y,prior_y); % kernel handle
+  k = compute_kernel_parameters(x,y,prior_y); % kernel handle
 
   % Compute posterior gaussian process
   posterior_matrix = compute_posterior(k, posterior_matrix, x, y);

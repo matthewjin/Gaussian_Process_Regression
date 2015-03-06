@@ -4,7 +4,7 @@
 % mu: vector of prior mean values (nx1)
 % OUTPUT:
 % k: function handle for prior kernel loaded with grid-search-optimized parameters
-function k=computeKernelParam(x,y,mu)
+function k = compute_kernel_parameters(x,y,mu)
 s_ytest=0.2:.1:1;
 s_ntest=0; %0.2:.1:1;
 ltest=0.1:.1:1.2;
