@@ -7,7 +7,7 @@ function main()
 % Settings
 addpath ./statistics;	% Add folder for LOWESS
 scale = 2;		% For scaling the variance (visual)
-range = [1, 50];
+range = [1, 4];
 full_size = 1000;
 init_size = 10; 
 rng(100);		% Set seed
