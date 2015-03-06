@@ -11,24 +11,27 @@ range = [1, 4];
 full_size = 1000;
 init_size = 10; 
 rng(100);		% Set seed
+s_n = 0.1;
 
-% Establish a posterior_matrix that will be updated
-posterior_matrix = [linspace(range(1), range(2), full_size)', zeros(full_size, 1), ...
-      zeros(full_size, 1)];
+% Establish a posterior_matrix and sample that will be updated
+posterior_matrix = establish_posterior_matrix(range, full_size);
+sampling_matrix = establish_sampling_matrix(init_size);
 
-% Generate data using noiseless GP
+% Construct the noisy_function (GP + noise)
 hidden_x = posterior_matrix(:, 1);	% Generate a realization of the GP
 hidden_y = hidden_function(hidden_x);	% For all values of x in full_size
-x_index = round(linspace(1,full_size,init_size));     
-x = hidden_x(x_index);			% Select init sampling 
-y = hidden_y(x_index);		
+noisy_function = @(x) make_noisy([hidden_x hidden_y], s_n, x);
+
+% Sample from noisy function
+sample_x = hidden_x(round(linspace(1,full_size,init_size)));
+sample_y = noisy_function(sample_x);
+sampling_matrix = [sample_x sample_y];
 
 % Establish prior gaussian process with LOWESS
-[~,~,~, xy] = lowess([x y],1,0,0,hidden_x);    % Establish prior mean
+[~,~,~, xy] = lowess(sampling_matrix,1,0,0,hidden_x);    % Establish prior mean
 posterior_matrix(:, 2) = xy(:, 2);
-muy=xy(:,2);
 
-k = compute_kernel_parameters(x,y,muy(x_index)); % Establish prior kernel
+k = index_compute_kernel_parameters(sampling_matrix,posterior_matrix); % Establish prior kernel
 
 % Compute the posterior gaussian process
 count = 1; % Set counter

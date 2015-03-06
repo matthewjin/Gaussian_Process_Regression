@@ -30,6 +30,7 @@ for s_y = s_y_list
       current_likelihood = likelihood(Sigma);
       
       if current_likelihood > max_likelihood
+	max_likelihood = current_likelihood;
 	max_s_y = s_y;
 	max_l = l;
 	max_s_n = s_n;

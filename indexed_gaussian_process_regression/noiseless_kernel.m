@@ -1,4 +1,4 @@
-function output = kernel(s_y, l, s_n, x_1, x_2)
+function output = noiseless_kernel(s_y, l, x_1, x_2)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Kernel function: given x_1, x_2, outputs covariance 
 
@@ -8,7 +8,7 @@ function output = kernel(s_y, l, s_n, x_1, x_2)
 %for noisy GP.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-output = s_y^2*exp(-0.5*(x_1-x_2).^2/l^2) + s_n^2*(x_1 == x_2);
+output = s_y^2*exp(-0.5*(x_1-x_2).^2/l^2);
 
 
 

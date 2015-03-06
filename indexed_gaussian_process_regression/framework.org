@@ -1,0 +1,9 @@
+* Project files
+** main.m
+   Set up a posterior matrix.
+   Set up hidden function (rewrite it such that it sets up the object first)
+   
+   
+
+      
+   
