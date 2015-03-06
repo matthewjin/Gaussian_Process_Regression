@@ -1,36 +1,43 @@
+function k = compute_kernel_parameters(x,y,mu)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Compute kernel parameters based on known sample values and prior belief
+%on mean (determined via LOWESS).	
 % INPUT:
 % x: vector of x values (nx1)
 % y: vector of y values (nx1)
 % mu: vector of prior mean values (nx1)
 % OUTPUT:
 % k: function handle for prior kernel loaded with grid-search-optimized parameters
-function k = compute_kernel_parameters(x,y,mu)
-s_ytest=0.2:.1:1;
-s_ntest=0; %0.2:.1:1;
-ltest=0.1:.1:1.2;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-maxl=-Inf;
-maxsn=NaN;maxsy=maxsn;maxlen=maxsy;
+s_y_list=0.2:.1:1;
+l_list=0.1:.1:1.2;
+s_n_list=0; %0.2:.1:1;
 
-n=numel(x);
+max_likelihood=-Inf;
+max_s_y = NaN; max_l = NaN; max_s_n = NaN;
 
-likelihood=NaN(numel(ltest),numel(s_ntest),numel(s_ytest));
+likelihood = @(Sigma) (-1/2)*log(det(Sigma))-((1/2)*(y-mu).')*(Sigma\(y-mu));
 
-for i=1:numel(s_ytest)
-    for j=1:numel(s_ntest)
-        for l=1:numel(ltest)
-            k = @(x_1, x_2) kernel(s_ytest(i), ltest(l), s_ntest(j), x_1, x_2); % kernel params to test
-            sigma = bsxfun(k, x, x');
-            likelihood(l,j,i)=(-1/2)*log(det(sigma))-((1/2)*(y-mu).')*(sigma\(y-mu))-(n/2)*log(2*pi);
-            if (likelihood(l,j,i) > maxl)
-                maxsy=s_ytest(i);
-                maxsn=s_ntest(j);
-                maxlen=ltest(l);
-                maxl=likelihood(l,j,i);
-            end
-        end
+for s_y = s_y_list
+  for l = l_list
+    for s_n = s_n_list
+      % Kernel params to test
+      k = @(x_1, x_2) kernel(s_y, l, s_n, x_1, x_2);
+      
+      % Compute likelihood
+      Sigma = bsxfun(k, x, x');
+      current_likelihood = likelihood(Sigma);
+      
+      if current_likelihood > max_likelihood
+	max_s_y = s_y;
+	max_l = l;
+	max_s_n = s_n;
+      end
     end
+  end
 end
-%k = @(x_1, x_2) kernel(maxsy, maxlen, maxsn, x_1, x_2); % kernel function with optimal parameters
-k = @(x_1, x_2) kernel(maxsy, maxlen, maxsn, x_1, x_2);
+
+% Set the final kernel
+k = @(x_1, x_2) kernel(max_s_y, max_l, max_s_n, x_1, x_2);
 end
